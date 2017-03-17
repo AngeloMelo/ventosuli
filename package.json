@@ -1,0 +1,32 @@
+{
+  "name": "ventosuli",
+  "version": "1.0.0",
+  "description": "\u0016Demo node.js application with login and image upload",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AngeloMelo/ventosuli.git"
+  },
+  "keywords": [
+    "node",
+    "node.js",
+    "angular.js",
+    "pg",
+    "express",
+    "jwt",
+    "sharp"
+  ],
+  "author": "Angelo Melo",
+  "dependencies":{
+	"express":"*",
+	"body-parser":"*"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AngeloMelo/ventosuli/issues"
+  },
+  "homepage": "https://github.com/AngeloMelo/ventosuli#readme"
+}
