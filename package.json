@@ -22,6 +22,7 @@
   "author": "Angelo Melo",
   "dependencies":{
 	"express":"*",
+	"morgan":"*",
 	"body-parser":"*"
   },
   "license": "ISC",
