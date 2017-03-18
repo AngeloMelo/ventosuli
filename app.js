@@ -54,7 +54,20 @@ apiRoutes.post('/authenticate', function(req, res) {
 
 //endpoint to create new user
 apiRoutes.post('/signup', function(req, res) {
-	res.send('signup');
+	
+	if (!req.body.name || !req.body.password) {
+	
+		res.json({success: false, msg: 'Please pass name and password.'});
+	
+	} else {	
+	
+		var newUser = {
+		  login: req.body.name,
+		  password: req.body.password
+		};
+		// save the user
+		User.saveUser(newUser, res);
+	}
 });
 
 //endpoint to show all photos
