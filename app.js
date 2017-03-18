@@ -2,6 +2,7 @@ var express    = require('express');
 var app        = express();
 var bodyParser = require('body-parser');
 var morgan     = require('morgan');
+var passport   = require('passport');
 var port       = process.env.PORT || 8080;
 
 
@@ -11,6 +12,10 @@ app.use(bodyParser.json());
 
 //configuring logging
 app.use(morgan('dev'));
+
+//configuring passport
+app.use(passport.initialize());
+require('./config/passport')(passport);
 
 //handling root requests
 app.get('/', function(req, res){
