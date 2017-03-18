@@ -1,4 +1,4 @@
 module.exports = {
-	'secret':'pterodactylus',
-	'database':'postgres://postgres:adpt@localhost:5432/bookstore'
+	'secret':'<secret>',
+	'database':'postgres://<user>:<pass>@<host>:<port>/<db>'
 };
