@@ -3,6 +3,7 @@ var app        = express();
 var bodyParser = require('body-parser');
 var morgan     = require('morgan');
 var passport   = require('passport');
+var jwt        = require('jwt-simple');
 var User       = require('./models/user');
 var config     = require('./config/database');
 var tokenUtil  = require('./config/token');
@@ -30,7 +31,25 @@ var apiRoutes = express.Router();
 
 //endpoint to authenticate a user
 apiRoutes.post('/authenticate', function(req, res) {
-	res.send('login');
+	User.findByName(req.body.name, function(err, user) {
+	
+		if (!user) {
+			res.send({success: false, msg: 'Authentication failed. User not found.'});
+		} else {
+			// check if password matches
+			User.comparePassword(req.body.password, user.usr_pass, function (err, isMatch) {
+				if (isMatch && !err) {
+					// if user is found and password is right create a token
+					var token = jwt.encode(user, config.secret);
+					
+					// return the information including token as JSON
+					res.json({success: true, token: 'JWT ' + token});
+				} else {
+					res.send({success: false, msg: 'Authentication failed. Wrong password.'});
+				}
+			});
+		}
+	});
 });
 
 //endpoint to create new user
@@ -46,7 +65,7 @@ apiRoutes.get('/photos', function(req, res){
 
 //endpoit to test private area
 apiRoutes.get('/memberinfo', passport.authenticate('jwt', { session: false}), function(req, res) {
-	var token = Token.getToken(req.headers);
+	var token = tokenUtil.getToken(req.headers);
 	if (token) {
 		var decoded = jwt.decode(token, config.secret);
 		var userName = decoded.usr_login;
@@ -64,6 +83,7 @@ apiRoutes.get('/memberinfo', passport.authenticate('jwt', { session: false}), fu
 		return res.status(403).send({success: false, msg: 'No token provided.'});
 	}
 });
+
 
 //configuring all routes under /api/*
 app.use('/api', apiRoutes);
