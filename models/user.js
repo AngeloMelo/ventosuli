@@ -8,6 +8,19 @@ User = function(){
 	this.client.connect();
 };
 
+User.prototype.findById = function (userId, cb) {
+
+	var query = this.client.query("SELECT * FROM users WHERE usr_id = " + userId );
+	
+	var result = undefined;
+	query.on('row', function(row) {
+		result = row;	
+	});
+	
+	query.on('end', function(){
+		cb(undefined, result);
+	});
+};
 
 User.prototype.saveUser = function (user, res){
 
@@ -42,19 +55,7 @@ User.prototype.next = function (err) {
 };
 
 
-User.prototype.findbyId = function (userId, cb) {
 
-	var query = this.client.query("SELECT * FROM users WHERE usr_id = " + userId );
-	
-	var result = undefined;
-	query.on('row', function(row) {
-		result = row;	
-	});
-	
-	query.on('end', function(){
-		cb(undefined, result);
-	});
-};
 
 User.prototype.findByName = function (userName, cb) {
 
