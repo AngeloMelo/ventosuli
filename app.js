@@ -3,6 +3,9 @@ var app        = express();
 var bodyParser = require('body-parser');
 var morgan     = require('morgan');
 var passport   = require('passport');
+var User       = require('./models/user');
+var config     = require('./config/database');
+var tokenUtil  = require('./config/token');
 var port       = process.env.PORT || 8080;
 
 
@@ -38,6 +41,28 @@ apiRoutes.post('/signup', function(req, res) {
 //endpoint to show all photos
 apiRoutes.get('/photos', function(req, res){
 	res.send('photos');
+});
+
+
+//endpoit to test private area
+apiRoutes.get('/memberinfo', passport.authenticate('jwt', { session: false}), function(req, res) {
+	var token = Token.getToken(req.headers);
+	if (token) {
+		var decoded = jwt.decode(token, config.secret);
+		var userName = decoded.usr_login;
+		
+		User.findByName(userName, function(err, user) {
+	
+			if (!user) {
+				return res.status(403).send({success: false, msg: 'Authentication failed. User not found.'});
+			} else {
+				res.json({success: true, msg: 'Welcome in the member area ' + userName + '!'});
+			}
+			
+		});
+	} else {
+		return res.status(403).send({success: false, msg: 'No token provided.'});
+	}
 });
 
 //configuring all routes under /api/*
