@@ -7,7 +7,7 @@ var jwt        = require('jwt-simple');
 var User       = require('./models/user');
 var config     = require('./config/database');
 var tokenUtil  = require('./config/token');
-var port       = process.env.PORT || 8080;
+var port       = process.env.PORT || 9000;
 
 
 //configuring body parser
@@ -21,6 +21,10 @@ app.use(morgan('dev'));
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
+
+//configuring frontend folder
+app.use(express.static(__dirname + '/frontend'));
+
 //handling root requests
 app.get('/', function(req, res){
 	res.send('API avaliable at http://localhost/'+ port +'/api');
@@ -30,7 +34,8 @@ app.get('/', function(req, res){
 var apiRoutes = express.Router();
 
 //endpoint to authenticate a user
-apiRoutes.post('/authenticate', function(req, res) {
+apiRoutes.post('/login', function(req, res) {
+
 	User.findByName(req.body.name, function(err, user) {
 	
 		if (!user) {
