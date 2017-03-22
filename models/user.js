@@ -41,17 +41,17 @@ User.prototype.saveUser = function (user, res){
 	var client = this.client;
 	this.loginValid(user.login, function(usr){
 	
-		if(usr) return res.status(500).json({success: false, data: 'Username already exists'});
+		if(usr) return res.json({success: false, msg: 'Username already exists'});
 		
 		bcrypt.genSalt(10, function (err, salt) {
 			if (err) {
 				console.log(err);
-				return res.status(500).json({ success: false, data: err});
+				return res.status(500).json({ success: false, msg: err});
 			}
 			bcrypt.hash(user.password, salt, function (err, hash) {
 				if (err) {
 					console.log(err);
-					return res.status(500).json({ success: false, data: err});
+					return res.status(500).json({ success: false, msg: err});
 				}
 				
 				try
@@ -61,7 +61,7 @@ User.prototype.saveUser = function (user, res){
 				catch(err)
 				{
 					console.log(err);
-					return res.status(500).json({ success: false, data: err});
+					return res.status(500).json({ success: false, msg: err});
 				}
 				return res.json({success: true, msg: 'User created'});
 			});
