@@ -1,0 +1,58 @@
+<html ng-app="vs">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>VentoSuli</title>
+		<link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
+		
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->	
+	</head>
+	<body>
+		<div class="site-wrapper">
+
+		  <div class="site-wrapper-inner">
+
+			<div class="cover-container">
+
+			  <div class="masthead clearfix">
+				<div class="inner">
+				  <h3 class="masthead-brand">VentoSuli</h3>
+				  <nav>
+					<ul class="nav masthead-nav">
+					  <li><a href="#">Home</a></li>
+					  <li><a href="#/login">login</a></li>
+					  <li><a href="#/signup">signup</a></li>
+					  <li><a href="#/photos">photos</a></li>
+					  <li><a href="#/upload">upload</a></li>
+					</ul>
+				  </nav>
+				</div>
+			  </div>
+			  
+			  <div class="row">
+			  <div class="col-md-12">
+			  <div ng-view></div>
+			  </div>
+			  </div>
+
+			</div>
+
+		  </div>
+
+		</div>
+
+		<script src="bower_components/jquery/dist/jquery.js"></script>
+		<script src="bower_components/angular/angular.js"></script>
+		<script src="bower_components/angular-route/angular-route.js"></script>
+		<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="app.js"></script>
+		<script src="controllers/users.js"></script>
+	</body>
+</html>
