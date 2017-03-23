@@ -1,13 +1,14 @@
-var express    = require('express');
-var app        = express();
-var bodyParser = require('body-parser');
-var morgan     = require('morgan');
-var passport   = require('passport');
-var jwt        = require('jwt-simple');
-var User       = require('./models/user');
-var config     = require('./config/database');
-var tokenUtil  = require('./config/token');
-var port       = process.env.PORT || 9000;
+var express     = require('express');
+var app         = express();
+var bodyParser  = require('body-parser');
+var morgan      = require('morgan');
+var passport    = require('passport');
+var jwt         = require('jwt-simple');
+var User        = require('./models/user');
+var AircraftDAO = require('./models/aircraft');
+var config      = require('./config/database');
+var tokenUtil   = require('./config/token');
+var port        = process.env.PORT || 9000;
 
 
 //configuring body parser
@@ -101,6 +102,74 @@ apiRoutes.get('/memberinfo', passport.authenticate('jwt', { session: false}), fu
 		return res.status(403).send({success: false, msg: 'No token provided.'});
 	}
 });
+
+
+//----------------------------
+//Aircraft
+//----------------------------
+app.get('/api/aircrafts', function(req, res){
+
+	AircraftDAO.getAll(function(err, results){
+		return res.json(results);
+	});
+
+});
+
+app.get('/api/aircrafts/:id', function(req, res){
+
+	var id = req.params.id;
+	AircraftDAO.findById(id, function(err, result){
+		return res.json(result);
+	});
+
+});
+
+app.delete('/api/aircrafts/:id', function(req, res){
+
+	var id = req.params.id;
+	AircraftDAO.remove(id, function(err, result){
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Aircraft deleted'});
+		}
+	});
+
+});
+
+app.put('/api/aircrafts/:id', function(req, res){
+
+	var id = req.params.id;
+	var aircraft = req.body;
+	aircraft.aircraft_id = id;
+	
+	AircraftDAO.update(aircraft, function(err, result){
+		
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Aircraft updated'});
+		}
+	});
+
+});
+
+app.post('/api/aircrafts', function(req, res){
+
+	var aircraft = req.body;
+	
+	AircraftDAO.add(aircraft, function(err, result){
+		
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Aircraft created'});
+		}
+	});
+
+});
+
+
 
 
 //configuring all routes under /api/*
