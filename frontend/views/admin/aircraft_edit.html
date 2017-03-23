@@ -1,0 +1,32 @@
+<div ng-init="getAircraft()">
+	<div class="col-sm-3 col-md-2 sidebar">
+		<ul class="nav nav-sidebar">
+			<li><a ng-click="openAircraftForm()">Aircraft</a></li>
+			<li><a ng-click="openOperatorForm()">Operator</a></li>
+			<li><a ng-click="openPhotographerForm()">Photographer</a></li>
+			<li><a ng-click="openPhotoForm()">Photo</a></li>
+			<li><a ng-click="logout()">Logout</a></li>
+		</ul>
+	</div>
+	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">Edit Aircraft</h1>
+		<div class="placeholder">
+			<a href="#/admin/aircraft">Go Back</a>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<form ng-submit="updateAircraft()">
+					<div class="form-group">
+						<label>Code</label>
+						<input type="text" class="form-control" ng-model="aircraft.aircraft_cd" placeholder="code"/>
+					</div>
+					<div class="form-group">
+						<label>Description</label>
+						<input type="text" class="form-control" ng-model="aircraft.aircraft_de" placeholder="description"/>
+					</div>					
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
