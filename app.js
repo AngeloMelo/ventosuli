@@ -6,6 +6,7 @@ var passport    = require('passport');
 var jwt         = require('jwt-simple');
 var User        = require('./models/user');
 var AircraftDAO = require('./models/aircraft');
+var OperatorDAO = require('./models/operators');
 var config      = require('./config/database');
 var tokenUtil   = require('./config/token');
 var port        = process.env.PORT || 9000;
@@ -105,7 +106,7 @@ apiRoutes.get('/memberinfo', passport.authenticate('jwt', { session: false}), fu
 
 
 //----------------------------
-//Aircraft
+//Endpoints for aircraft
 //----------------------------
 app.get('/api/aircrafts', function(req, res){
 
@@ -169,6 +170,70 @@ app.post('/api/aircrafts', function(req, res){
 
 });
 
+//----------------------------
+//Endpoints for operator
+//----------------------------
+app.get('/api/operators', function(req, res){
+
+	OperatorDAO.getAll(function(err, results){
+		return res.json(results);
+	});
+
+});
+
+app.get('/api/operators/:id', function(req, res){
+
+	var id = req.params.id;
+	OperatorDAO.findById(id, function(err, result){
+		return res.json(result);
+	});
+
+});
+
+app.delete('/api/operators/:id', function(req, res){
+
+	var id = req.params.id;
+	OperatorDAO.remove(id, function(err, result){
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Operator deleted'});
+		}
+	});
+
+});
+
+app.put('/api/operators/:id', function(req, res){
+
+	var id = req.params.id;
+	var operator = req.body;
+	operator.operator_id = id;
+	
+	OperatorDAO.update(operator, function(err, result){
+		
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Operator updated'});
+		}
+	});
+
+});
+
+app.post('/api/operators', function(req, res){
+
+	var operator = req.body;
+	
+	OperatorDAO.add(operator, function(err, result){
+		
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Operator created'});
+		}
+	});
+
+});
 
 
 
