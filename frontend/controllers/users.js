@@ -15,7 +15,7 @@ vs.controller('UsersController', ['$scope', '$http', '$location', '$routeParams'
 		
 			if (response.data.success) {
 				storeUserCredentials(response.data.token);
-				window.location.href = '#/upload';
+				window.location.href = '#/admin/home';
 			} else {
 				alert(response.data.msg);
 			}
@@ -40,6 +40,7 @@ vs.controller('UsersController', ['$scope', '$http', '$location', '$routeParams'
 		window.location.href = '#/home';
 	}
 	
+	
 	$scope.testmemberarea = function(){
 	
 		$http.get('/api/memberinfo').then(function(response){
@@ -57,6 +58,7 @@ vs.controller('UsersController', ['$scope', '$http', '$location', '$routeParams'
 		window.localStorage.setItem(LOCAL_TOKEN_KEY, token);
 		useCredentials(token);
 	}
+	
 	
 	function useCredentials(token) {
 		isAuthenticated = true;
