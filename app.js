@@ -1,15 +1,16 @@
-var express     = require('express');
-var app         = express();
-var bodyParser  = require('body-parser');
-var morgan      = require('morgan');
-var passport    = require('passport');
-var jwt         = require('jwt-simple');
-var User        = require('./models/user');
-var AircraftDAO = require('./models/aircraft');
-var OperatorDAO = require('./models/operators');
-var config      = require('./config/database');
-var tokenUtil   = require('./config/token');
-var port        = process.env.PORT || 9000;
+var express         = require('express');
+var app             = express();
+var bodyParser      = require('body-parser');
+var morgan          = require('morgan');
+var passport        = require('passport');
+var jwt             = require('jwt-simple');
+var User            = require('./models/user');
+var AircraftDAO     = require('./models/aircraft');
+var OperatorDAO     = require('./models/operators');
+var PhotographerDAO = require('./models/photographers');
+var config          = require('./config/database');
+var tokenUtil       = require('./config/token');
+var port            = process.env.PORT || 9000;
 
 
 //configuring body parser
@@ -235,6 +236,72 @@ app.post('/api/operators', function(req, res){
 
 });
 
+
+
+//----------------------------
+//Endpoints for photographer
+//----------------------------
+app.get('/api/photographers', function(req, res){
+
+	PhotographerDAO.getAll(function(err, results){
+		return res.json(results);
+	});
+
+});
+
+app.get('/api/photographers/:id', function(req, res){
+
+	var id = req.params.id;
+	PhotographerDAO.findById(id, function(err, result){
+		return res.json(result);
+	});
+
+});
+
+app.delete('/api/photographers/:id', function(req, res){
+
+	var id = req.params.id;
+	PhotographerDAO.remove(id, function(err, result){
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Photographer deleted'});
+		}
+	});
+
+});
+
+app.put('/api/photographers/:id', function(req, res){
+
+	var id = req.params.id;
+	var photographer = req.body;
+	photographer.photographer_id = id;
+	
+	PhotographerDAO.update(photographer, function(err, result){
+		
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Photographer updated'});
+		}
+	});
+
+});
+
+app.post('/api/photographers', function(req, res){
+
+	var photographer = req.body;
+	
+	PhotographerDAO.add(photographer, function(err, result){
+		
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Photographer created'});
+		}
+	});
+
+});
 
 
 //configuring all routes under /api/*
