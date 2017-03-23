@@ -49,5 +49,21 @@ vs.config(function($routeProvider, $locationProvider){
 	.when('/admin/operators/add',{
 		controller:'OperatorController',
 		templateUrl:'views/admin/operator_add.html'
+	})	
+	.when('/admin/photographers/',{
+		controller:'PhotographerController',
+		templateUrl:'views/admin/photographer.html'
+	})
+	.when('/admin/photographers/edit/:id',{
+		controller:'PhotographerController',
+		templateUrl:'views/admin/photographer_edit.html'
+	})
+	.when('/admin/photographers/add',{
+		controller:'PhotographerController',
+		templateUrl:'views/admin/photographer_add.html'
+	})
+	.when('/admin/logout',{
+		controller:'UsersController',
+		templateUrl:'views/admin/logout.html'
 	});
 });
