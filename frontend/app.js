@@ -26,7 +26,7 @@ vs.config(function($routeProvider, $locationProvider){
 		controller:'AdminController',
 		templateUrl:'/views/admin/admin.html'
 	})
-	.when('/admin/aircraft',{
+	.when('/admin/aircrafts',{
 		controller:'AircraftController',
 		templateUrl:'views/admin/aircraft.html'
 	})
@@ -37,5 +37,17 @@ vs.config(function($routeProvider, $locationProvider){
 	.when('/admin/aircrafts/add',{
 		controller:'AircraftController',
 		templateUrl:'views/admin/aircraft_add.html'
+	})
+	.when('/admin/operators/',{
+		controller:'OperatorController',
+		templateUrl:'views/admin/operator.html'
+	})
+	.when('/admin/operators/edit/:id',{
+		controller:'OperatorController',
+		templateUrl:'views/admin/operator_edit.html'
+	})
+	.when('/admin/operators/add',{
+		controller:'OperatorController',
+		templateUrl:'views/admin/operator_add.html'
 	});
 });

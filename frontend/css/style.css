@@ -56,7 +56,7 @@ body {
   margin-left: -20px;
 }
 .nav-sidebar > li > a {
-  padding-right: 20px;
+  padding-right: 150px;
   padding-left: 20px;
 }
 .nav-sidebar > .active > a,
@@ -143,3 +143,8 @@ height: 400px; overflow: auto;
 }
 
 */
+
+
+.admsidebar{
+	max-width: 300px;
+}

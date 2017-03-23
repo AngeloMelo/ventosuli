@@ -8,7 +8,18 @@ vs.controller('AdminController', ['$scope', '$http', '$location', '$routeParams'
 		
 		if(isAuthorized())
 		{
-			window.location.href = '#/admin/aircraft';
+			window.location.href = '#/admin/aircrafts';
+		} else {
+			alert("Please login to access admin area");
+			window.location.href = '#/login';
+		}
+	}
+	
+	$scope.openOperatorForm = function(){
+		
+		if(isAuthorized())
+		{
+			window.location.href = '#/admin/operators';
 		} else {
 			alert("Please login to access admin area");
 			window.location.href = '#/login';
