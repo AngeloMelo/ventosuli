@@ -15,6 +15,17 @@ vs.controller('AdminController', ['$scope', '$http', '$location', '$routeParams'
 		}
 	}
 	
+	$scope.openPhotographerForm = function(){
+		
+		if(isAuthorized())
+		{
+			window.location.href = '#/admin/photographers';
+		} else {
+			alert("Please login to access admin area");
+			window.location.href = '#/login';
+		}
+	}
+		
 	$scope.openOperatorForm = function(){
 		
 		if(isAuthorized())

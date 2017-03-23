@@ -1,11 +1,31 @@
 <div ng-init="getAircraft()">
 	<div class="col-sm-3 col-md-2 sidebar">
 		<ul class="nav nav-sidebar">
-			<li><a ng-click="openAircraftForm()">Aircraft</a></li>
-			<li><a ng-click="openOperatorForm()">Operator</a></li>
-			<li><a ng-click="openPhotographerForm()">Photographer</a></li>
-			<li><a ng-click="openPhotoForm()">Photo</a></li>
-			<li><a ng-click="logout()">Logout</a></li>
+			<li>
+				<a class="btn btn-default btn-lg" href="#/admin/aircrafts">
+					<span class="glyphicon glyphicon-plane" aria-hidden="true"></span> Aircraft
+				</a>
+			</li>
+			<li>
+				<a class="btn btn-default btn-lg" href="#/admin/operators">
+					<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Operator
+				</a>
+			</li>
+			<li>
+				<a class="btn btn-default btn-lg" href="#/admin/photographers">
+					<span class="glyphicon glyphicon-camera" aria-hidden="true"></span> Photographer
+				</a>
+			</li>
+			<li>
+				<a class="btn btn-default btn-lg" href="#/admin/photos">
+					<span class="glyphicon glyphicon-picture" aria-hidden="true"></span> Photo
+				</a>
+			</li>
+			<li>
+				<a class="btn btn-default btn-lg" href="#/admin/logout">
+					<span class="glyphicon glyphicon-off" aria-hidden="true"></span> Logout
+				</a>
+			</li>
 		</ul>
 	</div>
 	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
