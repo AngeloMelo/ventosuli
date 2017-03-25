@@ -1,26 +1,22 @@
-<div class="photolist" ng-init="load()">
+<div class="photolist" ng-init="loadFln()">
 
 	<div class="photolist">
 		<div class="thumbs">					
 			<div ng-repeat="photo in photos" class="thumb-cell">
 				<div class="thumb-img">
-					<img src="../photos/{{photo.category_cd}}/{{photo.photo_cd}}">
+					<img src="../photos/{{photo.category_cd}}/{{photo.photo_cd}}" ng-click="openPhotoDetail(photo.photo_id)">
 				</div>	
-				<div class="thumb-container thumb-aircraft">
-					<div class="thumb-title">Aeronave</div>
-					<div class="thumb-descript">{{photo.aircraft_de}}</div>	
-					<div class="thumb-reg">
-						REG: {{photo.reg_cd}}
-					</div>
-				</div>
+				
 				<div class="thumb-container thumb-photographer">
 					<div class="thumb-title">Fotografo</div>
 					<div class="thumb-descript">{{photo.photographer_nm}}</div>	
 					<div class="thumb-reg">
 						Data: {{photo.photo_dt}}
 					</div>
-				</div>
-				
+				</div>	
+<div class="thumb-container thumb-aircraft">
+					
+				</div>				
 				<div class="thumb-container thumb-comments">
 					<div class="thumb-title">Descri&ccedil;&atilde;o</div>
 					<div class="thumb-descript">{{photo.coments}}</div>
@@ -30,3 +26,5 @@
 	</div>
 		
 </div>
+
+<div class="footer"></div>
