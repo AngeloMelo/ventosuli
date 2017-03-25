@@ -28,7 +28,11 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="#">Home</a></li>
+						<li><a href="#/home">Home</a></li>
+						<li><a href="#/photos/civ">Civil</a></li>
+						<li><a href="#/photos/mil">Militar</a></li>
+						<li><a href="#/photos/priv">Privado</a></li>
+						<li><a href="#/photos/fln">Aeroporto</a></li>
 						<li><a href="#/login">login</a></li>
 						<li><a href="#/signup">signup</a></li>
 					</ul>
@@ -44,7 +48,7 @@
 			<div class="row">
 				<div ng-view></div>
 			</div>
-		</div>
+		</div>		
 
 		<script src="bower_components/jquery/dist/jquery.js"></script>
 		<script src="bower_components/angular/angular.js"></script>
@@ -55,6 +59,8 @@
 		<script src="controllers/aircraft.js"></script>
 		<script src="controllers/operator.js"></script>
 		<script src="controllers/photographer.js"></script>
+		<script src="controllers/photo.js"></script>
+		<script src="controllers/photo-adm.js"></script>
 		<script src="controllers/admin.js"></script>
 	</body>
 </html>
