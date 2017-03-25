@@ -8,6 +8,7 @@ var User            = require('./models/user');
 var AircraftDAO     = require('./models/aircraft');
 var OperatorDAO     = require('./models/operators');
 var PhotographerDAO = require('./models/photographers');
+var PhotoDAO        = require('./models/photos');
 var config          = require('./config/database');
 var tokenUtil       = require('./config/token');
 var port            = process.env.PORT || 9000;
@@ -299,6 +300,18 @@ app.post('/api/photographers', function(req, res){
 		} else {
 			return res.json({success: true, msg: 'Photographer created'});
 		}
+	});
+
+});
+
+
+//----------------------------
+//Endpoints for photo
+//----------------------------
+app.get('/api/photos', function(req, res){
+
+	PhotoDAO.getAll(req.query, function(err, results){
+		return res.json(results);
 	});
 
 });
