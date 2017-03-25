@@ -14,9 +14,21 @@ vs.config(function($routeProvider, $locationProvider){
 		controller:'UsersController',
 		templateUrl:'/views/home.html'
 	})
-	.when('/photos', {
-		controller:'PhotoAdmController',
-		templateUrl: '/views/admin/photos.html'
+	.when('/photos/civ', {
+		controller:'PhotoController',
+		templateUrl: '/views/civ.html'
+	})
+	.when('/photos/mil', {
+		controller:'PhotoController',
+		templateUrl: '/views/mil.html'
+	})
+	.when('/photos/priv', {
+		controller:'PhotoController',
+		templateUrl: '/views/priv.html'
+	})
+	.when('/photos/fln', {
+		controller:'PhotoController',
+		templateUrl: '/views/fln.html'
 	})
 	.when('/upload',{
 		controller:'UsersController',
@@ -61,6 +73,18 @@ vs.config(function($routeProvider, $locationProvider){
 	.when('/admin/photographers/add',{
 		controller:'PhotographerController',
 		templateUrl:'views/admin/photographer_add.html'
+	})	
+	.when('/admin/photos/',{
+		controller:'PhotoAdmController',
+		templateUrl:'views/admin/photos.html'
+	})
+	.when('/admin/photos/edit/:id',{
+		controller:'PhotoAdmController',
+		templateUrl:'views/admin/photo_edit.html'
+	})
+	.when('/admin/photos/add',{
+		controller:'PhotoAdmController',
+		templateUrl:'views/admin/photo_add.html'
 	})
 	.when('/admin/logout',{
 		controller:'UsersController',
