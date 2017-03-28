@@ -21,7 +21,6 @@ vs.controller('PhotographerController', ['$scope', '$http', '$location', '$route
 			{
 				window.location.href = '#/admin/photographers';
 			}
-			
 			alert(res.data.msg);
 		});
 	}
