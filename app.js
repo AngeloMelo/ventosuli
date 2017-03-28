@@ -12,6 +12,13 @@ var PhotoDAO        = require('./models/photos');
 var config          = require('./config/database');
 var tokenUtil       = require('./config/token');
 var port            = process.env.PORT || 9000;
+//includes for image upload and resizing
+var path = require('path');
+var formidable = require('formidable');
+var fs = require('fs');
+var fsx = require('fs-extra');
+var Jimp = require('jimp');
+
 
 
 //configuring body parser
@@ -312,6 +319,140 @@ app.get('/api/photos', function(req, res){
 
 	PhotoDAO.getAll(req.query, function(err, results){
 		return res.json(results);
+	});
+
+});
+
+
+app.post('/api/photos/upload', function(req, res){
+
+	// create an incoming form object
+    var form = new formidable.IncomingForm();
+
+	// specify that we want to allow the user to upload multiple files in a single request
+    form.multiples = true;
+	
+	// store all uploads in the /uploads directory
+    form.uploadDir = path.join(__dirname, '/frontend/uploads');
+	
+	var fileName = "";
+	// every time a file has been uploaded successfully, rename it to it's orignal name
+	form.on('file', function(field, file) {
+	
+	    fs.rename(file.path, path.join(form.uploadDir, file.name));
+		console.log('handling photo' + file.name);
+		
+		fileName = file.name;
+		
+	});
+
+	// log any errors that occur
+	form.on('error', function(err) {
+		console.log('An error has occured: \n' + err);
+	});
+
+	// once all the files have been uploaded, send a response to the client
+	form.on('end', function() {
+		//creating thumb:
+		var fullSizePath = __dirname + '/frontend/uploads/' + fileName;
+		var thumbPath = __dirname + '/frontend/uploads/thumbs/' + fileName;
+		
+		// open a file called "lenna.png"
+		Jimp.read(fullSizePath, function (err, lenna) {
+	
+			if (err) throw err;
+			lenna.resize(1024, Jimp.AUTO)            // resize
+			 .quality(60)                 // set JPEG quality
+			 .write(fullSizePath); // save
+		});
+		
+				
+		Jimp.read(fullSizePath, function (err, lenna) {
+	
+			if (err) throw err;
+			lenna.resize(200, 130)            // resize
+				 .quality(60)                 // set JPEG quality
+				 .write(thumbPath); // save
+		});
+		res.end(fileName);
+		res.end(fileName);
+	});
+
+	// parse the incoming request containing the form data
+	form.parse(req);
+});
+
+
+app.post('/api/photos', function(req, res){
+
+	var photo = req.body;
+	
+	//move photo to section
+	var tmpFullSizePath = __dirname + '/frontend/uploads/' + photo.photo_cd;
+	var tmpThumbPath = __dirname + '/frontend/uploads/thumbs/' + photo.photo_cd;
+
+	var fullSizePath = __dirname + '/frontend/photos/' + photo.category_cd + '/lg/' + photo.photo_cd;
+	var thumbPath = __dirname + '/frontend/photos/' + photo.category_cd + '/' + photo.photo_cd;
+	
+	fsx.move(tmpFullSizePath, fullSizePath, function (err) {
+		if (err) console.error(err.message);
+		console.log("success!")
+	})
+	
+	fsx.move(tmpThumbPath, thumbPath, function (err) {
+		if (err) return console.error(err)
+		console.log("success!")
+	})
+	
+	PhotoDAO.add(photo, function(err, result){
+		
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Photo created'});
+		}
+	});
+
+});
+
+
+app.delete('/api/photos/:id', function(req, res){
+
+	var id = req.params.id;
+	PhotoDAO.remove(id, function(err, result){
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Photo deleted'});
+		}
+	});
+
+});
+
+
+app.get('/api/photos/:id', function(req, res){
+
+	var id = req.params.id;
+	PhotoDAO.findById(id, function(err, result){
+		return res.json(result);
+	});
+
+});
+
+
+app.put('/api/photos/:id', function(req, res){
+
+	var id = req.params.id;
+	var photo = req.body;
+	photo.photo_id = id;
+	
+	PhotoDAO.update(photo, function(err, result){
+		
+		if(err){
+			return res.json({ success: false, msg: err});
+		} else {
+			return res.json({success: true, msg: 'Photo updated'});
+		}
 	});
 
 });

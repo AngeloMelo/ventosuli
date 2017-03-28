@@ -28,7 +28,10 @@
 	"passport-jwt":"^1.2.1",
 	"bcrypt":"*",
 	"jwt-simple":"^0.3.1",
-	"pg":"*"
+	"pg":"*",
+	"formidable":"*",
+	"jimp":"*",
+	"fs-extra":"*"
   },
   "license": "ISC",
   "bugs": {
