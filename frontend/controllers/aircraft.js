@@ -19,7 +19,7 @@ vs.controller('AircraftController', ['$scope', '$http', '$location', '$routePara
 		$http.post('/api/aircrafts/', $scope.aircraft).then(function(res){
 			if(res.data.success)
 			{
-				window.location.href = '#/admin/aircraft';
+				window.location.href = '#/admin/aircrafts';
 			}
 			
 			alert(res.data.msg);
@@ -32,7 +32,7 @@ vs.controller('AircraftController', ['$scope', '$http', '$location', '$routePara
 			
 			if(res.data.success)
 			{
-				window.location.href = '#/admin/aircraft';
+				window.location.href = '#/admin/aircrafts';
 			}
 			
 			alert(res.data.msg);
@@ -48,7 +48,7 @@ vs.controller('AircraftController', ['$scope', '$http', '$location', '$routePara
 				
 				if(res.data.success)
 				{
-					window.location.href = '#/admin/aircraft';
+					window.location.href = '#/admin/aircrafts';
 				}
 				
 				alert(res.data.msg);
