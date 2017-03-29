@@ -1,6 +1,7 @@
 var vs = angular.module('vs');
 
-vs.controller('AircraftController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams){
+vs.controller('AircraftController', ['$scope', '$http', '$location', '$routeParams', '$uibModal', 'modalService', function($scope, $http, $location, $routeParams, $uibModal, modalService){
+
 	$scope.load = function(){
 		$http.get('/api/aircrafts').then(function(res){
 			$scope.aircrafts = res.data;
@@ -41,19 +42,38 @@ vs.controller('AircraftController', ['$scope', '$http', '$location', '$routePara
 	
 	$scope.removeAircraft = function(id)
 	{
-		var deleteReg = window.confirm('Are you sure you want to delete?');
-		if(deleteReg){
+		$scope.aircraft = getAircraft(id);
 		
-			$http.delete('/api/aircrafts/' + id, $scope.aircraft).then(function(res){
+		var modalOptions = {
+			closeButtonText: 'Cancel',
+			actionButtonText: 'Delete ',
+			headerText: 'Delete Aircraft?',
+			bodyText: 'Are you sure you want to delete ' + $scope.aircraft.aircraft_de
+		};
+
+		modalService.showModal({}, modalOptions).then(function (result) {
+			
+			$http.delete('/api/aircrafts/' + $scope.aircraft.aircraft_id, $scope.aircraft).then(function(res){
 				
 				if(res.data.success)
 				{
-					window.location.href = '#/admin/aircrafts';
+					$scope.load();
 				}
 				
 				alert(res.data.msg);
 			});
-		}
+		});
 	}
+	
+	
+	function getAircraft(id)
+	{
+		for(var i=0; i< $scope.aircrafts.length; i++)
+		{
+			if($scope.aircrafts[i].aircraft_id == id) return $scope.aircrafts[i];
+		}
+		return undefined;
+	}
+	
 	
 }]);
