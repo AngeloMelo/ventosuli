@@ -1,11 +1,19 @@
 var myApp = angular.module('vs');
 
-myApp.controller('PhotoAdmController', ['$scope', '$http', '$location', '$routeParams', '$window', function($scope, $http, $location, $routeParams, $window){
+myApp.controller('PhotoAdmController', ['$scope', '$http', '$location', '$routeParams', '$window', '$uibModal', 'modalService',
+	function($scope, $http, $location, $routeParams, $window, $uibModal, modalService){
 
 	$scope.qtCivil = 0;
 	$scope.qtMil = 0;
 	$scope.qtPriv = 0;
 	$scope.qtFln = 0;
+	$scope.pageSize = 10;
+	$scope.currentPage = 1;
+	
+	
+	$scope.photo = {
+		photo_cd :''
+	}
 	$scope.load = function()
 	{
 		$http.get('/api/photos').then(function(response){
@@ -106,7 +114,7 @@ myApp.controller('PhotoAdmController', ['$scope', '$http', '$location', '$routeP
 	
 	$scope.showThumb = function(photoName){
 	
-		$scope.photo.cd_imagem = photoName;
+		$scope.photo.photo_cd = photoName;
 		$('#photoThumb').attr('src', '../uploads/thumbs/' + photoName); 
 		$('#photoThumb').css('display', 'block'); 
 		$('#chose-photo').text('Alterar'); 
@@ -114,35 +122,111 @@ myApp.controller('PhotoAdmController', ['$scope', '$http', '$location', '$routeP
 	
 	$scope.loadCombos = function()
 	{
-		$http.get('/api/types').success(function(response){
-			$scope.types = response;
+		$http.get('/api/aircrafts').then(function(response){
+			$scope.aircrafts = response.data;
 		});
 		
-		$http.get('/api/operators').success(function(response){
-			$scope.operators = response;
+		$http.get('/api/operators').then(function(response){
+			$scope.operators = response.data;
 		});
+		
+		$http.get('/api/photographers').then(function(response){
+			$scope.photographers = response.data;
+		});		
 	}
 
 	$scope.addPhoto = function(){
 	
-		$http.post('/api/photos', $scope.photo).success(function(response){
+		$http.post('/api/photos', $scope.photo).then(function(response){
 		
-			window.location.href = '#/photos';
+			alert(response.data.msg);
+			window.location.href = '#/admin/photos';
 		});
 	}
 	
 	$scope.getPhoto = function(){
 		
 		var photoId = $routeParams.id;
-		$http.get('/api/photos/' + photoId).success(function(response){
+		$http.get('/api/photos/' + photoId).then(function(response){
 		
-			var photo = response[0];
-			var photoDate = photo.dt_imagem;
-			photo.dt_imagem = new Date(photoDate);
-			photo.selectedSection = photo.cd_finalidade;
+			var photo = response.data;
+			var photoDate = photo.photo_dt;
+			photo.photo_dt = new Date(photoDate);
+			photo.selectedCategory = photo.category_cd;
 			$scope.photo = photo;
 		
 		});	
+	}
+	
+	$scope.removePhoto = function(id){
+	
+		var modalRef = $uibModal.open({
+			animation: true,
+			templateUrl: 'remove-modal.html',
+			size: 'sm',
+			controller: ModalInstanceController
+		});	
+		modalRef.selPhoto = getPhoto($scope, id);;		
+	}
+	
+	function showSuccessMessage(msg){
+		$uibModal.open({
+			animation: true,
+			templateUrl: 'alert-modal.html',
+			size: 'sm',
+			controller: alertController
+		});	
+	}
+	
+	function ModalInstanceController($scope, $uibModalInstance) {
+
+		var id = $uibModalInstance.selPhoto.photo_id;
+		$scope.selPhoto = $uibModalInstance.selPhoto;
+		
+        $scope.ok = function() {
+			
+            $uibModalInstance.close();
+			$http.delete('/api/photos/' + id).then(function(response){
+			
+				showSuccessMessage(response.data.msg);
+				//window.location.href = '#/admin/photos';
+			});
+        };
+
+        $scope.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+        };
+    }
+	
+	
+	function alertController($scope, $uibModalInstance) {
+
+        $scope.ok = function() {
+			
+            $uibModalInstance.close();
+        };
+    }
+	
+	
+	function getPhoto($scope, id)
+	{
+		for(var i=0; i< $scope.photos.length; i++)
+		{
+			if($scope.photos[i].photo_id == id) return $scope.photos[i];
+		}
+		
+		return undefined;
+	}
+	
+	$scope.editPhoto = function(){
+	
+		var id = $scope.photo.photo_id;
+		$http.put('/api/photos/' + id, $scope.photo).then(function(response){
+		
+			alert(response.data.msg);
+			window.location.href = '#/admin/photos';
+		});
+	
 	}
 	
 }]);
