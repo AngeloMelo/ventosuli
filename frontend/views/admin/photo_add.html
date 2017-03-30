@@ -1,0 +1,125 @@
+<div ng-init="loadCombos()">
+	<div class="col-sm-3 col-md-2 sidebar">
+		<ul class="nav nav-sidebar">
+			<li>
+				<a class="btn btn-default btn-lg" href="#/admin/aircrafts">
+					<span class="glyphicon glyphicon-plane" aria-hidden="true"></span> Aircraft
+				</a>
+			</li>
+			<li>
+				<a class="btn btn-default btn-lg" href="#/admin/operators">
+					<span class="glyphicon glyphicon-star" aria-hidden="true"></span> Operator
+				</a>
+			</li>
+			<li>
+				<a class="btn btn-default btn-lg" href="#/admin/photographers">
+					<span class="glyphicon glyphicon-camera" aria-hidden="true"></span> Photographer
+				</a>
+			</li>
+			<li>
+				<a class="btn btn-default btn-lg" href="#/admin/photos">
+					<span class="glyphicon glyphicon-picture" aria-hidden="true"></span> Photo
+				</a>
+			</li>
+			<li>
+				<a class="btn btn-default btn-lg" href="#/admin/logout">
+					<span class="glyphicon glyphicon-off" aria-hidden="true"></span> Logout
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">New photo</h1>
+		<div class="placeholder">
+			<a href="#/admin/photos">Go Back</a>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<form ng-submit="addPhoto()">
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="photo_dt">Date</label>
+								<input type="date" class="form-control" required="true" ng-model="photo.photo_dt" id="photo_dt">
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="reg_cd">Registration</label>
+								<input type="text" class="form-control" ng-model="photo.reg_cd" id="reg_cd">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="origin">Origin</label>
+								<input type="text" id="origin" class="form-control" ng-model="photo.origin"/>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="photographer_id">Photographer</label>
+								<select id="photographer_id" required="true"  ng-model="photo.photographer_id" class="form-control">
+									<option ng-repeat="photographer in photographers" value="{{photographer.photographer_id}}">{{photographer.photographer_nm}}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="aircraft_id">Aircraft</label>
+								<select id="aircraft_id" ng-model="photo.aircraft_id" class="form-control">
+									<option ng-repeat="aircraft in aircrafts" value="{{aircraft.aircraft_id}}">{{aircraft.aircraft_de}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="operator">Operator</label>
+								<select id="operator" ng-model="photo.operator_id" class="form-control">
+									<option ng-repeat="operator in operators" value="{{operator.operator_id}}">{{operator.operator_de}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-4">				
+							<div class="form-group">
+								<label for="category_cd">Category</label>
+								<select id="category_cd" required="true"  ng-model="photo.category_cd" class="form-control">
+									<option value="1">Civil</option>
+									<option value="2">Militar</option>
+									<option value="3">Privado</option>
+									<option value="4">Aeroporto</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">			
+						<div class="col-md-8">
+							<div class="form-group">
+								<label for="coments">Comments</label>
+								<textarea rows="3" id="coments" class="form-control" ng-model="photo.coments"></textarea>
+							</div>
+						</div>			
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="photo-file">Foto</label>
+								<div class="progress" id="photo-progress">
+									<div class="progress-bar" role="progressbar"></div>
+								</div>
+								<img id="photoThumb">
+								
+								<button id="chose-photo" class="btn btn-sm upload-btn" type="button" ng-click="choseFile()">
+									<span class="glyphicon glyphicon-open-file" aria-hidden="true"></span>&nbsp;Choose file
+								</button>
+								<input type="file" id="photo-file" style="display:none" name="photo-file" onchange="angular.element(this).scope().doUpload(this.files)">
+							</div>
+						</div>
+					</div>
+
+					
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
