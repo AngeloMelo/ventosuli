@@ -1,4 +1,4 @@
-var vs = angular.module('vs', ['ngRoute']);
+var vs = angular.module('vs', ['ngRoute', 'ui.bootstrap']);
 
 vs.config(function($routeProvider, $locationProvider){
 	$locationProvider.hashPrefix('');
@@ -113,3 +113,11 @@ vs.directive('modalDialog', function() {
     template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideModal()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-close' ng-click='hideModal()'>X</div><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
   };
 });
+
+vs.filter('startFrom', function(){
+	return function(data, start){
+		if(!data) return;
+		start = 0 + start;
+		return data.slice(start);
+	}
+})
