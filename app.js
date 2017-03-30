@@ -357,12 +357,12 @@ app.post('/api/photos/upload', function(req, res){
 		var fullSizePath = __dirname + '/frontend/uploads/' + fileName;
 		var thumbPath = __dirname + '/frontend/uploads/thumbs/' + fileName;
 		
-		// open a file called "lenna.png"
+		// open a file
 		Jimp.read(fullSizePath, function (err, lenna) {
 	
 			if (err) throw err;
 			lenna.resize(1024, Jimp.AUTO)            // resize
-			 .quality(60)                 // set JPEG quality
+			 .quality(100)                 // set JPEG quality
 			 .write(fullSizePath); // save
 		});
 		
@@ -370,8 +370,8 @@ app.post('/api/photos/upload', function(req, res){
 		Jimp.read(fullSizePath, function (err, lenna) {
 	
 			if (err) throw err;
-			lenna.resize(200, 130)            // resize
-				 .quality(60)                 // set JPEG quality
+			lenna.resize(200, 130, Jimp.RESIZE_BEZIER)            // resize
+				 .quality(100)                 // set JPEG quality
 				 .write(thumbPath); // save
 		});
 		res.end(fileName);
