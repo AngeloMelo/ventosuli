@@ -77,7 +77,7 @@ AircraftDAO.prototype.getAll = function (cb) {
 
 	var results = [];
 	
-	var query = this.client.query("SELECT aircraft_id, aircraft_cd, aircraft_de FROM aircraft");
+	var query = this.client.query("SELECT aircraft_id, aircraft_cd, aircraft_de FROM aircraft ORDER BY aircraft_de");
 	
 	query.on('row', function(row) {
 		results.push(row);	
