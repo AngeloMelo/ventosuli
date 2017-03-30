@@ -77,7 +77,7 @@ OperatorDAO.prototype.getAll = function (cb) {
 
 	var results = [];
 	
-	var query = this.client.query("SELECT operator_id, operator_cd, operator_de FROM operators");
+	var query = this.client.query("SELECT operator_id, operator_cd, operator_de FROM operators ORDER BY operator_de");
 	
 	query.on('row', function(row) {
 		results.push(row);	
