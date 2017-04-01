@@ -45,5 +45,4 @@ angular.module('vs').service('modalService', ['$uibModal', function ($uibModal) 
 
         return $uibModal.open(tempModalDefaults).result;
     };
-
 }]);

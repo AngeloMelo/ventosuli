@@ -1,6 +1,7 @@
 var vs = angular.module('vs');
 
-vs.controller('AircraftController', ['$scope', '$http', '$location', '$routeParams', '$uibModal', 'modalService', function($scope, $http, $location, $routeParams, $uibModal, modalService){
+vs.controller('AircraftController', ['$scope', '$http', '$location', '$routeParams', 'modalService', 'messageBoxService', 
+	function($scope, $http, $location, $routeParams, modalService, messageBoxService){
 
 	$scope.load = function(){
 		$http.get('/api/aircrafts').then(function(res){
@@ -21,11 +22,16 @@ vs.controller('AircraftController', ['$scope', '$http', '$location', '$routePara
 			if(res.data.success)
 			{
 				window.location.href = '#/admin/aircrafts';
+				messageBoxService.showSuccess(res.data.msg);
 			}
-			
-			alert(res.data.msg);
+			else
+			{
+				messageBoxService.showError(res.data.msg);
+			}
+
 		});
 	}
+	
 	
 	$scope.updateAircraft = function(){
 		var id = $routeParams.id;
@@ -34,11 +40,15 @@ vs.controller('AircraftController', ['$scope', '$http', '$location', '$routePara
 			if(res.data.success)
 			{
 				window.location.href = '#/admin/aircrafts';
+				messageBoxService.showSuccess(res.data.msg);
 			}
-			
-			alert(res.data.msg);
+			else
+			{
+				messageBoxService.showError(res.data.msg);
+			}
 		});
 	}
+	
 	
 	$scope.removeAircraft = function(id)
 	{
@@ -58,9 +68,12 @@ vs.controller('AircraftController', ['$scope', '$http', '$location', '$routePara
 				if(res.data.success)
 				{
 					$scope.load();
+					messageBoxService.showSuccess(res.data.msg);
 				}
-				
-				alert(res.data.msg);
+				else
+				{
+					messageBoxService.showError(res.data.msg);
+				}
 			});
 		});
 	}

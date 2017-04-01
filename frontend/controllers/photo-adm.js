@@ -1,7 +1,7 @@
 var myApp = angular.module('vs');
 
-myApp.controller('PhotoAdmController', ['$scope', '$http', '$location', '$routeParams', '$window', '$uibModal', 'modalService',
-	function($scope, $http, $location, $routeParams, $window, $uibModal, modalService){
+myApp.controller('PhotoAdmController', ['$scope', '$http', '$location', '$routeParams', '$window',  'modalService', 'messageBoxService',
+	function($scope, $http, $location, $routeParams, $window, modalService, messageBoxService){
 
 	$scope.qtCivil = 0;
 	$scope.qtMil = 0;
@@ -118,6 +118,7 @@ myApp.controller('PhotoAdmController', ['$scope', '$http', '$location', '$routeP
 		$('#photoThumb').attr('src', '../uploads/thumbs/' + photoName); 
 		$('#photoThumb').css('display', 'block'); 
 		$('#chose-photo').text('Alterar'); 
+		$('#photoThumb').attr('src', '../uploads/thumbs/' + photoName); 
 	}
 	
 	$scope.loadCombos = function()
@@ -137,12 +138,45 @@ myApp.controller('PhotoAdmController', ['$scope', '$http', '$location', '$routeP
 
 	$scope.addPhoto = function(){
 	
+		if($scope.photo.photo_cd == undefined || $scope.photo.photo_cd == '')
+		{
+			messageBoxService.showWarning('Choose a valid photo file');
+			return;
+		}
+		
 		$http.post('/api/photos', $scope.photo).then(function(response){
 		
-			alert(response.data.msg);
-			window.location.href = '#/admin/photos';
+			if(response.data.success)
+			{
+				window.location.href = '#/admin/photos';
+				messageBoxService.showSuccess(response.data.msg);
+			}
+			else
+			{
+				messageBoxService.showError(response.data.msg);
+			}
 		});
 	}
+	
+	
+	$scope.editPhoto = function(){
+	
+		var id = $scope.photo.photo_id;
+		$http.put('/api/photos/' + id, $scope.photo).then(function(response){
+		
+			if(response.data.success)
+			{
+				window.location.href = '#/admin/photos';
+				messageBoxService.showSuccess(response.data.msg);
+			}
+			else
+			{
+				messageBoxService.showError(response.data.msg);
+			}
+		});
+	
+	}
+	
 	
 	$scope.getPhoto = function(){
 		
@@ -158,57 +192,36 @@ myApp.controller('PhotoAdmController', ['$scope', '$http', '$location', '$routeP
 		});	
 	}
 	
+	
 	$scope.removePhoto = function(id){
 	
-		var modalRef = $uibModal.open({
-			animation: true,
-			templateUrl: 'remove-modal.html',
-			size: 'sm',
-			controller: ModalInstanceController
-		});	
-		modalRef.selPhoto = getPhoto($scope, id);;		
-	}
-	
-	function showSuccessMessage(msg){
-		$uibModal.open({
-			animation: true,
-			templateUrl: 'alert-modal.html',
-			size: 'sm',
-			controller: alertController
-		});	
-	}
-	
-	function ModalInstanceController($scope, $uibModalInstance) {
-
-		var id = $uibModalInstance.selPhoto.photo_id;
-		$scope.selPhoto = $uibModalInstance.selPhoto;
+		$scope.selPhoto = getPhoto(id);
 		
-        $scope.ok = function() {
+		var modalOptions = {
+			closeButtonText: 'Cancel',
+			actionButtonText: 'Delete ',
+			headerText: 'Delete photo?',
+			bodyText: 'Are you sure you want to delete ' + $scope.selPhoto.photo_id
+		};
+
+		modalService.showModal({}, modalOptions).then(function (result) {
 			
-            $uibModalInstance.close();
-			$http.delete('/api/photos/' + id).then(function(response){
-			
-				showSuccessMessage(response.data.msg);
-				//window.location.href = '#/admin/photos';
+			$http.delete('/api/photos/' + $scope.selPhoto.photo_id).then(function(res){
+				if(res.data.success)
+				{
+					$scope.load();
+					messageBoxService.showSuccess(res.data.msg);
+				}
+				else
+				{
+					messageBoxService.showError(res.data.msg);
+				}
 			});
-        };
-
-        $scope.cancel = function() {
-            $uibModalInstance.dismiss('cancel');
-        };
-    }
+		});
+	}
 	
-	
-	function alertController($scope, $uibModalInstance) {
-
-        $scope.ok = function() {
-			
-            $uibModalInstance.close();
-        };
-    }
-	
-	
-	function getPhoto($scope, id)
+		
+	function getPhoto(id)
 	{
 		for(var i=0; i< $scope.photos.length; i++)
 		{
@@ -218,15 +231,5 @@ myApp.controller('PhotoAdmController', ['$scope', '$http', '$location', '$routeP
 		return undefined;
 	}
 	
-	$scope.editPhoto = function(){
-	
-		var id = $scope.photo.photo_id;
-		$http.put('/api/photos/' + id, $scope.photo).then(function(response){
-		
-			alert(response.data.msg);
-			window.location.href = '#/admin/photos';
-		});
-	
-	}
 	
 }]);

@@ -1,6 +1,8 @@
 var vs = angular.module('vs');
 
-vs.controller('OperatorController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams){
+vs.controller('OperatorController', ['$scope', '$http', '$location', '$routeParams', 'modalService', 'messageBoxService',
+	function($scope, $http, $location, $routeParams, modalService, messageBoxService){
+	
 	$scope.load = function(){
 		$http.get('/api/operators').then(function(res){
 			$scope.operators = res.data;
@@ -20,9 +22,12 @@ vs.controller('OperatorController', ['$scope', '$http', '$location', '$routePara
 			if(res.data.success)
 			{
 				window.location.href = '#/admin/operators';
+				messageBoxService.showSuccess(res.data.msg);
 			}
-			
-			alert(res.data.msg);
+			else
+			{
+				messageBoxService.showError(res.data.msg);
+			}
 		});
 	}
 	
@@ -33,27 +38,48 @@ vs.controller('OperatorController', ['$scope', '$http', '$location', '$routePara
 			if(res.data.success)
 			{
 				window.location.href = '#/admin/operators';
+				messageBoxService.showSuccess(res.data.msg);
 			}
-			
-			alert(res.data.msg);
+			else
+			{
+				messageBoxService.showError(res.data.msg);
+			}
 		});
 	}
 	
 	$scope.removeOperator = function(id)
-	{
-		var deleteReg = window.confirm('Are you sure you want to delete?');
-		if(deleteReg){
+	{	
+		$scope.operator = getOperator(id);
 		
-			$http.delete('/api/operators/' + id, $scope.operator).then(function(res){
-				
+		var modalOptions = {
+			closeButtonText: 'Cancel',
+			actionButtonText: 'Delete ',
+			headerText: 'Delete operator?',
+			bodyText: 'Are you sure you want to delete ' + $scope.operator.operator_de
+		};
+
+		modalService.showModal({}, modalOptions).then(function (result) {
+			
+			$http.delete('/api/operators/' + $scope.operator.operator_id, $scope.operator).then(function(res){
 				if(res.data.success)
 				{
-					window.location.href = '#/admin/operators';
+					$scope.load();
+					messageBoxService.showSuccess(res.data.msg);
 				}
-				
-				alert(res.data.msg);
+				else
+				{
+					messageBoxService.showError(res.data.msg);
+				}
 			});
-		}
+		});
 	}
-	
+
+	function getOperator(id)
+	{
+		for(var i=0; i< $scope.operators.length; i++)
+		{
+			if($scope.operators[i].operator_id == id) return $scope.operators[i];
+		}
+		return undefined;
+	}	
 }]);

@@ -1,6 +1,8 @@
 var vs = angular.module('vs');
 
-vs.controller('PhotographerController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams){
+vs.controller('PhotographerController', ['$scope', '$http', '$location', '$routeParams', 'modalService', 'messageBoxService',
+	function($scope, $http, $location, $routeParams, modalService, messageBoxService){
+	
 	$scope.load = function(){
 		$http.get('/api/photographers').then(function(res){
 			$scope.photographers = res.data;
@@ -20,8 +22,12 @@ vs.controller('PhotographerController', ['$scope', '$http', '$location', '$route
 			if(res.data.success)
 			{
 				window.location.href = '#/admin/photographers';
+				messageBoxService.showSuccess(res.data.msg);
 			}
-			alert(res.data.msg);
+			else
+			{
+				messageBoxService.showError(res.data.msg);
+			}
 		});
 	}
 	
@@ -32,27 +38,49 @@ vs.controller('PhotographerController', ['$scope', '$http', '$location', '$route
 			if(res.data.success)
 			{
 				window.location.href = '#/admin/photographers';
+				messageBoxService.showSuccess(res.data.msg);
 			}
-			
-			alert(res.data.msg);
+			else
+			{
+				messageBoxService.showError(res.data.msg);
+			}
 		});
 	}
 	
 	$scope.removePhotographer = function(id)
 	{
-		var deleteReg = window.confirm('Are you sure you want to delete?');
-		if(deleteReg){
+		$scope.photographer = getPhotographer(id);
 		
-			$http.delete('/api/photographers/' + id, $scope.photographer).then(function(res){
-				
+		var modalOptions = {
+			closeButtonText: 'Cancel',
+			actionButtonText: 'Delete ',
+			headerText: 'Delete photographer?',
+			bodyText: 'Are you sure you want to delete ' + $scope.photographer.photographer_nm
+		};
+
+		modalService.showModal({}, modalOptions).then(function (result) {
+			
+			$http.delete('/api/photographers/' + $scope.photographer.photographer_id, $scope.photographer).then(function(res){
 				if(res.data.success)
 				{
-					window.location.href = '#/admin/photographers';
+					$scope.load();
+					messageBoxService.showSuccess(res.data.msg);
 				}
-				
-				alert(res.data.msg);
+				else
+				{
+					messageBoxService.showError(res.data.msg);
+				}
 			});
-		}
+		});
 	}
+
+	function getPhotographer(id)
+	{
+		for(var i=0; i< $scope.photographers.length; i++)
+		{
+			if($scope.photographers[i].photographer_id == id) return $scope.photographers[i];
+		}
+		return undefined;
+	}	
 	
 }]);
